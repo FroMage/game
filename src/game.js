@@ -16,6 +16,10 @@ var bg3;
 var bg3Offset = 0;
 const bg3Speed = 1;
 
+var hero;
+var heroOffset = 480/2;
+const heroSpeed = 6;
+
 function clear(){
 	ctx.fillStyle = 'white';
 	ctx.fillRect(0, 0, 640, 480);
@@ -34,11 +38,16 @@ function drawBackground(bg, offset){
 	ctx.drawImage(bg, 0, 0, sw2, 480, dx2, 0, sw2, 480);
 }
 
+function drawSprite(img, x, y){
+	ctx.drawImage(img, 0, 0, 32, 32, x, y, 32, 32);
+}
+
 function draw(){
 	clear();
 	drawBackground(bg1, bg1Offset);
 	drawBackground(bg2, bg2Offset);
 	drawBackground(bg3, bg3Offset);
+	drawSprite(hero, 32, heroOffset);
 	bg1Offset += bg1Speed;
 	bg2Offset += bg2Speed;
 	bg3Offset += bg3Speed;
@@ -52,19 +61,20 @@ function startLoop(){
 }
 
 function loadBg(){
-	var loading = 3;
+	var loading = 4;
     const bitmaps = [];
     function makeLoader(i, img, bitmaps){
         return function() {
-    		  createImageBitmap(img, 0, 0, 640, 480)
+        	var w = i <= 2 ? 640 : 32; 
+        	var h = i <= 2 ? 480 : 32; 
+    		  createImageBitmap(img, 0, 0, w, h)
     		    .then(function(bitmap){
-    	    		console.log("bitmaps["+i+"]: "+bitmap);
     		    	bitmaps[i] = bitmap;
     		    	if(--loading == 0){
     		    		bg1 = bitmaps[0];
     		    		bg2 = bitmaps[1];
     		    		bg3 = bitmaps[2];
-    		    		console.log("bg1: "+bg1);
+    		    		hero = bitmaps[3];
     		    		startLoop();
     		    	}
     		    });
@@ -75,10 +85,29 @@ function loadBg(){
         img.src = "../images/bg-"+(i+1)+".png";
         img.onload = makeLoader(i, img, bitmaps);
     }   
+    const img = new Image;
+    img.src = "../images/hero.png";
+    img.onload = makeLoader(3, img, bitmaps);
 }
-
 
 window.addEventListener('load', (event) => {
 	loadBg();
 });
 
+document.addEventListener("keydown", event => {
+	if (event.isComposing || event.keyCode === 229) {
+	    return;
+	}
+	var consumed = false;
+	if(event.keyCode == 38){
+		heroOffset = Math.max(heroOffset - heroSpeed, 32);
+		consumed = true;
+	} else if(event.keyCode == 40){
+		heroOffset = Math.min(heroOffset + heroSpeed, 480 - 32);
+		consumed = true;
+	}
+	if(consumed){
+		event.preventDefault();
+		event.stopPropagation();
+	}
+});
