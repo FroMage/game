@@ -12,6 +12,7 @@ function clear(){
 
 function draw(){
 	clear();
+	makeBaddies();
 	drawBackgrounds();
 	drawSprites();
 }
@@ -43,9 +44,10 @@ window.addEventListener('load', (event) => {
 		"../images/bg-1.png",
 		"../images/bg-2.png",
 		"../images/bg-3.png",
-		"../images/hero.png"
+		"../images/hero.png",
+		"../images/bad-1.png"
 	], function(bitmaps) {
-		[bg1, bg2, bg3, hero] = bitmaps;
+		[bg1, bg2, bg3, hero, bad1] = bitmaps;
 		startLoop();
 	});
 });
