@@ -4,6 +4,7 @@ const heroSpeed = 6;
 
 var projectiles = [];
 var baddies = [];
+var explosions = [];
 
 var bad1;
 const bad1Speed = 2;
@@ -13,7 +14,6 @@ function drawSprite(img, x, y){
 }
 
 function drawSprites(){
-	let explode = false;
 	drawSprite(hero, 32, heroOffset);
 	for(let projectile of projectiles){
 		// detect collisions
@@ -21,7 +21,7 @@ function drawSprites(){
 			if(!baddie.dead && collision(baddie, projectile)){
 				baddie.dead = true;
 				projectile.dead = true;
-				explode = true;
+				explode(baddie);
 			}
 		}
 		if(!projectile.dead){
@@ -33,6 +33,9 @@ function drawSprites(){
 			drawBaddie(baddie);
 		}
 	}
+	for(let explosion of explosions){
+		drawExplosion(explosion);
+	}
 	// remove out of bounds and dead projectiles
 	projectiles = projectiles.filter(function(projectile){ 
 		return projectile.x < 640 && !projectile.dead;
@@ -41,9 +44,51 @@ function drawSprites(){
 	baddies = baddies.filter(function(baddie){
 		return baddie.x > 0 && !baddie.dead;
 	});
-	if(explode){
-		explosion.play();
-	}
+	// remove dead explosions
+	explosions = explosions.filter(function(explosion){ 
+		return explosion.radius < 20;
+	});
+}
+
+function drawExplosion(explosion){
+	let adjust = Math.floor(explosion.radius * 0.75);
+	// N
+	drawExplosionPart(explosion.x, explosion.y - explosion.radius);
+	// NE
+	drawExplosionPart(explosion.x + adjust, explosion.y - adjust);
+	// E
+	drawExplosionPart(explosion.x + explosion.radius, explosion.y);
+	// SE
+	drawExplosionPart(explosion.x + adjust, explosion.y + adjust);
+	// S
+	drawExplosionPart(explosion.x, explosion.y + explosion.radius);
+	// SW
+	drawExplosionPart(explosion.x - adjust, explosion.y + adjust);
+	// W
+	drawExplosionPart(explosion.x - explosion.radius, explosion.y);
+	// NW
+	drawExplosionPart(explosion.x - adjust, explosion.y - adjust);
+	
+	explosion.radius++;
+	// inertia
+	explosion.x -= explosion.inertia;
+}
+
+function drawExplosionPart(x, y){
+	ctx.fillStyle = 'red';
+	ctx.beginPath();
+	ctx.ellipse(x, y, 5, 5, 0, 0, 2 * Math.PI);
+	ctx.fill();
+}
+
+function explode(baddie){
+	explosions.push({
+		x: baddie.x + baddie.w/2,
+		y: baddie.y + baddie.h/2,
+		radius: 0,
+		inertia: bad1Speed
+	});
+	explosion.play();
 }
 
 function drawProjectile(projectile){
