@@ -88,6 +88,7 @@ function explode(baddie){
 		radius: 0,
 		inertia: bad1Speed
 	});
+	score += 10;
 	explosion.play();
 }
 

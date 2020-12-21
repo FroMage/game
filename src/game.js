@@ -15,6 +15,7 @@ function draw(){
 	makeBaddies();
 	drawBackgrounds();
 	drawSprites();
+	drawScore();
 }
 
 function startLoop(){
