@@ -27,9 +27,11 @@ function cleanup(list){
 	return list.filter(function(elem){ return elem.valid(); });
 }
 
-function drawSprites(){
+function handleSprites(){
 	// draw
-	draw(hero);
+	if(!gameOver){
+		draw(hero);
+	}
 	draw(projectiles);
 	draw(baddies);
 	draw(explosions);
@@ -46,6 +48,7 @@ function drawSprites(){
 }
 
 function collisions(){
+	// projectiles
 	for(let projectile of projectiles){
 		// detect collisions
 		for(let baddie of baddies){
@@ -54,6 +57,17 @@ function collisions(){
 				projectile.dead = true;
 				explode(baddie);
 				// only explode single baddie
+				break;
+			}
+		}
+	}
+	if(!gameOver){
+		// hero
+		for(let baddie of baddies){
+			if(!baddie.dead && collision(baddie, hero)){
+				hero.dead = true;
+				explode(hero);
+				gameOver = true;
 				break;
 			}
 		}

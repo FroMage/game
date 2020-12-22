@@ -5,3 +5,4 @@ function drawScore(){
 	ctx.fillStyle = 'red';
 	ctx.fillText("Score: "+score, 10, 20);
 }
+
