@@ -63,9 +63,10 @@ window.addEventListener('load', (event) => {
 		"../images/bg-2.png",
 		"../images/bg-3.png",
 		"../images/hero.png",
-		"../images/bad-1.png"
+		"../images/bad-1.png",
+		"../images/bad-2.png",
 	], function(bitmaps) {
-		[bg1, bg2, bg3, heroSprite, bad1Sprite] = bitmaps;
+		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite] = bitmaps;
 		startLoop();
 	});
 });

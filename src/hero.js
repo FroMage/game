@@ -9,8 +9,9 @@ function makeHero(){
 			y: 480/2,
 			w: 32,
 			h: 32,
+			img: heroSprite,
 			draw: function() {
-				drawSprite(heroSprite, 32, this.y);
+				drawSprite(this);
 			}
 	}
 }

@@ -1,6 +1,6 @@
 
-function drawSprite(img, x, y){
-	ctx.drawImage(img, 0, 0, 32, 32, x, y, 32, 32);
+function drawSprite(sprite){
+	ctx.drawImage(sprite.img, 0, 0, sprite.w, sprite.h, sprite.x, sprite.y, sprite.w, sprite.h);
 }
 
 function draw(obj){
@@ -82,7 +82,7 @@ function collision(a, b){
 	if(a.x > b.x + b.w)
 		return false;
 	// a is before on y
-	if(a.y + a.y < b.y)
+	if(a.y + a.h < b.y)
 		return false;
 	// a is after on y
 	if(a.y > b.y + b.h)
