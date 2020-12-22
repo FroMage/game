@@ -27,7 +27,7 @@ function drawExplosionPart(x, y){
 	ctx.fill();
 }
 
-function explode(sprite){
+function addSimpleExplosion(sprite){
 	explosions.push({
 		x: sprite.x + sprite.w/2,
 		y: sprite.y + sprite.h/2,
@@ -45,8 +45,46 @@ function explode(sprite){
 			return this.radius < 20;
 		}
 	});
+}
+
+function explode(sprite){
+	addSimpleExplosion(sprite);
 	if(sprite.reward) {
 		score += sprite.reward;
 	}
 	sprite.explosionSound.play();
+}
+
+function explodeBig(sprite){
+	if(sprite.reward) {
+		score += sprite.reward;
+	}
+	sprite.explosionSound.play();
+}
+
+function addBigExplosionPart(sprite){
+	let x = sprite.x + (sprite.w * Math.random());
+	let y = sprite.y + (sprite.h * Math.random());
+	explosions.push({
+		x: x,
+		y: y,
+		radius: 0,
+		draw: function(){
+			drawExplosionCircle(this.x, this.y, this.radius);
+		},
+		move: function(){
+			this.radius += 0.2;
+		},
+		valid: function(){
+			return this.radius < 20;
+		}
+	});
+
+}
+
+function drawExplosionCircle(x, y, radius){
+	ctx.strokeStyle = 'red';
+	ctx.beginPath();
+	ctx.ellipse(x, y, radius, radius, 0, 0, 2 * Math.PI);
+	ctx.stroke();
 }

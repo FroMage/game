@@ -14,6 +14,9 @@ function makeHero(){
 			hearts: 3,
 			img: heroSprite,
 			explosionSound: deadSound,
+			explode: function(){
+				explode(this);
+			},
 			draw: function() {
 				if(this.grace == 0 || (this.grace-- % 20) < 10){
 					drawSprite(this);
@@ -47,17 +50,13 @@ function heroShoots(){
 function heroTouched(){
 	if(--hero.hearts == 0){
 		hero.dead = true;
-		explode(hero);
+		hero.explode();
 		gameOver = true;
 	} else {
-		heroHurt();
+		// three seconds
+		hero.grace = 3 * fps;
+		hurtSound.play();
 	}
-}
-
-function heroHurt(){
-	// three seconds
-	hero.grace = 3 * fps;
-	hurtSound.play();
 }
 
 function drawProjectile(projectile){

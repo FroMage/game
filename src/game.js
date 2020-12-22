@@ -2,10 +2,10 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const fps = 60;
-const frame = 0;
 
 var timerId;
 var gameOver = false;
+var frame = 0;
 
 function clear(){
 	ctx.fillStyle = 'black';
@@ -22,12 +22,13 @@ function drawGameOver(){
 }
 
 function drawGame(){
+	frame++;
 	clear();
 	makeBaddies();
 	makeObjects();
 	drawBackgrounds();
 	drawScore();
-	drawHearts();
+	drawHearts(hero.hearts, 10);
 	// this detects collisions and can game over
 	handleSprites();
 	if(gameOver){
@@ -66,11 +67,12 @@ window.addEventListener('load', (event) => {
 		"../images/hero.png",
 		"../images/bad-1.png",
 		"../images/bad-2.png",
+		"../images/boss.png",
 		"../images/heart-empty.png",
 		"../images/heart-full.png",
 	], function(bitmaps) {
 		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite, 
-			heartEmptySprite, heartFullSprite] = bitmaps;
+			bossSprite, heartEmptySprite, heartFullSprite] = bitmaps;
 		startLoop();
 	});
 });

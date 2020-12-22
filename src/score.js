@@ -8,9 +8,9 @@ function drawScore(){
 	ctx.fillText("Score: "+score, 10 + (4*16), 20);
 }
 
-function drawHearts(){
+function drawHearts(hearts, offset){
 	for(var i=0 ; i<3 ; i++){
-		let sprite = hero.hearts > i ? heartFullSprite : heartEmptySprite;
-		drawSprite({img: sprite, x: 10 + (i * 16), y: 8, w: 16, h:16});
+		let sprite = hearts > i ? heartFullSprite : heartEmptySprite;
+		drawSprite({img: sprite, x: offset + (i * 16), y: 8, w: 16, h:16});
 	}
 }

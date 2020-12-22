@@ -56,11 +56,10 @@ function collisions(){
 		if(projectile.friend){
 			// detect friend projectile collisions with baddies
 			for(let baddie of baddies){
-				if(!baddie.dead && collision(baddie, projectile)){
-					baddie.dead = true;
+				if(!baddie.dead && baddie.grace == 0 && collision(baddie, projectile)){
 					projectile.dead = true;
-					explode(baddie);
-					// only explode single baddie
+					baddieTouched(baddie);
+					// only touch single baddie
 					break;
 				}
 			}
