@@ -18,7 +18,6 @@ function drawGameOver(){
 	ctx.fillStyle = 'red';
 	let text = "GAME OVER";
 	let size = ctx.measureText(text);
-	console.log(size);
 	ctx.fillText(text, (640-size.width)/2, (480+height)/2);
 }
 
@@ -27,6 +26,7 @@ function drawGame(){
 	makeBaddies();
 	drawBackgrounds();
 	drawScore();
+	drawHearts();
 	// this detects collisions and can game over
 	handleSprites();
 	if(gameOver){
@@ -65,8 +65,11 @@ window.addEventListener('load', (event) => {
 		"../images/hero.png",
 		"../images/bad-1.png",
 		"../images/bad-2.png",
+		"../images/heart-empty.png",
+		"../images/heart-full.png",
 	], function(bitmaps) {
-		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite] = bitmaps;
+		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite, 
+			heartEmptySprite, heartFullSprite] = bitmaps;
 		startLoop();
 	});
 });

@@ -45,6 +45,8 @@ function explode(baddie){
 			return this.radius < 20;
 		}
 	});
-	score += baddie.reward;
+	if(baddie.reward) {
+		score += baddie.reward;
+	}
 	explosionSound.play();
 }

@@ -9,9 +9,13 @@ function makeHero(){
 			y: 480/2,
 			w: 32,
 			h: 32,
+			grace: 0,
+			hearts: 3,
 			img: heroSprite,
 			draw: function() {
-				drawSprite(this);
+				if(this.grace == 0 || (this.grace-- % 20) < 10){
+					drawSprite(this);
+				}
 			}
 	}
 }
@@ -34,6 +38,12 @@ function heroShoots(){
 	}
 	pewSound.play();
 	projectiles.push(projectile);
+}
+
+function heroHurt(){
+	// three seconds
+	hero.grace = 3 * fps;
+	hurtSound.play();
 }
 
 function drawProjectile(projectile){

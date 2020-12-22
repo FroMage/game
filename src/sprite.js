@@ -61,13 +61,17 @@ function collisions(){
 			}
 		}
 	}
-	if(!gameOver){
+	if(!gameOver && hero.grace == 0){
 		// hero
 		for(let baddie of baddies){
 			if(!baddie.dead && collision(baddie, hero)){
-				hero.dead = true;
-				explode(hero);
-				gameOver = true;
+				if(--hero.hearts == 0){
+					hero.dead = true;
+					explode(hero);
+					gameOver = true;
+				} else {
+					heroHurt();
+				}
 				break;
 			}
 		}
