@@ -21,7 +21,7 @@ function makeBaddie(type){
 			drawSprite(this);
 		},
 		move: function(){
-			if(--this.shoot == 0){
+			if(!gameOver && --this.shoot == 0){
 				this.shoot = fps * 3;
 				baddieShoots(this);
 			}
