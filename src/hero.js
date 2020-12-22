@@ -13,6 +13,7 @@ function makeHero(){
 			grace: 0,
 			hearts: 3,
 			img: heroSprite,
+			explosionSound: deadSound,
 			draw: function() {
 				if(this.grace == 0 || (this.grace-- % 20) < 10){
 					drawSprite(this);
@@ -27,7 +28,7 @@ function heroShoots(){
 			y: hero.y + 14,
 			w: 10,
 			h: 1,
-			color: 'black',
+			color: 'white',
 			friend: true,
 			draw: function(){
 				drawProjectile(this);
@@ -95,6 +96,7 @@ function makeHeart(){
 		eat: function(){
 			if(!gameOver){
 				hero.hearts = Math.min(hero.hearts + 1, 3);
+				heartSound.play();
 			}
 		}
 	});

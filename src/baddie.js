@@ -13,6 +13,7 @@ function makeBaddie(type){
 		h: 32,
 		reward: type == 1 ? 10 : 20,
 		img: type == 1 ? bad1Sprite : bad2Sprite,
+	    explosionSound: explosionSound,
 		// for moving sprites
 		movementOffset: 0,
 		movement: 2,

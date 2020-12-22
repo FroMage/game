@@ -8,7 +8,7 @@ var timerId;
 var gameOver = false;
 
 function clear(){
-	ctx.fillStyle = 'white';
+	ctx.fillStyle = 'black';
 	ctx.fillRect(0, 0, 640, 480);
 }
 

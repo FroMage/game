@@ -27,10 +27,10 @@ function drawExplosionPart(x, y){
 	ctx.fill();
 }
 
-function explode(baddie){
+function explode(sprite){
 	explosions.push({
-		x: baddie.x + baddie.w/2,
-		y: baddie.y + baddie.h/2,
+		x: sprite.x + sprite.w/2,
+		y: sprite.y + sprite.h/2,
 		radius: 0,
 		inertia: bad1Speed,
 		draw: function(){
@@ -45,8 +45,8 @@ function explode(baddie){
 			return this.radius < 20;
 		}
 	});
-	if(baddie.reward) {
-		score += baddie.reward;
+	if(sprite.reward) {
+		score += sprite.reward;
 	}
-	explosionSound.play();
+	sprite.explosionSound.play();
 }
