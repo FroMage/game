@@ -35,20 +35,23 @@ function handleSprites(){
 	draw(projectiles);
 	draw(baddies);
 	draw(explosions);
+	draw(objects);
 	// move
 	move(projectiles);
 	move(baddies);
 	move(explosions);
+	move(objects);
 	// collisions
 	collisions();
 	// cleanup
 	projectiles = cleanup(projectiles);
 	baddies = cleanup(baddies);
 	explosions = cleanup(explosions);
+	objects = cleanup(objects);
 }
 
 function collisions(){
-	// projectiles
+	// friendly projectiles
 	for(let projectile of projectiles){
 		if(projectile.friend){
 			// detect friend projectile collisions with baddies
@@ -63,25 +66,35 @@ function collisions(){
 			}
 		}
 	}
-	if(!gameOver && hero.grace == 0){
-		// hero
-		let handled = false;
-		for(let baddie of baddies){
-			if(!baddie.dead && collision(baddie, hero)){
-				heroTouched();
-				handled = true;
-				break;
+	if(!gameOver){
+		// hero damage
+		if(hero.grace == 0){
+			// hero
+			let handled = false;
+			for(let baddie of baddies){
+				if(!baddie.dead && collision(baddie, hero)){
+					heroTouched();
+					handled = true;
+					break;
+				}
 			}
-		}
-		if(!handled){
-			for(let projectile of projectiles){
-				if(!projectile.friend){
-					// detect hostile projectile collisions with baddies
-					if(collision(hero, projectile)){
-						heroTouched();
-						break;
+			if(!handled){
+				for(let projectile of projectiles){
+					if(!projectile.friend){
+						// detect hostile projectile collisions with baddies
+						if(collision(hero, projectile)){
+							heroTouched();
+							break;
+						}
 					}
 				}
+			}
+		}
+		// objects
+		for(let obj of objects){
+			if(!obj.dead && collision(obj, hero)){
+				obj.dead = true;
+				obj.eat();
 			}
 		}
 	}

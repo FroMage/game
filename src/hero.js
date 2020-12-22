@@ -2,6 +2,7 @@ var heroSprite;
 const heroSpeed = 6;
 
 var projectiles = [];
+var objects = [];
 
 function makeHero(){
 	hero = {
@@ -64,4 +65,37 @@ function drawProjectile(projectile){
 	ctx.moveTo(projectile.x, projectile.y);  // Move the pen to (x, y)
 	ctx.lineTo(projectile.x + projectile.w, projectile.y + projectile.h);  // Draw a line to (x+10, y)
 	ctx.stroke();          // Render the path
+}
+
+function makeObjects(){
+	let rand = Math.random();
+	// 0.2% chance
+	if(rand < 0.002){
+		console.log("make heart");
+		makeHeart();
+	}
+}
+
+function makeHeart(){
+	objects.push({
+		x : 630,
+		y : 30 + Math.floor(Math.random() * 440),
+		w: 16,
+		h: 16,
+		img: heartFullSprite,
+		draw: function(){
+			drawSprite(this);
+		},
+		move: function(){
+			this.x -= bad1Speed;
+		},
+		valid: function(){
+			return this.x > 0 && !this.dead;
+		},
+		eat: function(){
+			if(!gameOver){
+				hero.hearts = Math.min(hero.hearts + 1, 3);
+			}
+		}
+	});
 }

@@ -24,6 +24,7 @@ function drawGameOver(){
 function drawGame(){
 	clear();
 	makeBaddies();
+	makeObjects();
 	drawBackgrounds();
 	drawScore();
 	drawHearts();
