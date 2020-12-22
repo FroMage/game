@@ -16,10 +16,15 @@ function makeBaddie(type){
 		// for moving sprites
 		movementOffset: 0,
 		movement: 2,
+		shoot: fps * 3,
 		draw: function(){
 			drawSprite(this);
 		},
 		move: function(){
+			if(--this.shoot == 0){
+				this.shoot = fps * 3;
+				baddieShoots(this);
+			}
 			if(type == 1){
 				this.x -= bad1Speed;
 			} else {
@@ -37,6 +42,36 @@ function makeBaddie(type){
 			return this.x > 0 && !this.dead;
 		}
 	});
+}
+
+function baddieShoots(baddie){
+	let horiz = hero.x - baddie.x;
+	let vert = hero.y - baddie.y;
+	let angle = Math.atan(vert / horiz);
+	let projectile = {
+			x: baddie.x + 8,
+			y: baddie.y + 8,
+			w: -10 * Math.cos(angle),
+			h: -10 * Math.sin(angle),
+			color: 'red',
+			friend: false,
+			draw: function(){
+				drawProjectile(this);
+			},
+			move: function(){
+				this.x += Math.floor(this.w / 2);
+				this.y += Math.floor(this.h / 2);
+			},
+			valid: function(){
+				return this.x < 640 &&
+					this.y < 480 &&
+					this.x > 0 &&
+					this.y > 0 &&
+					!this.dead;
+			}
+	}
+	pewSound.play();
+	projectiles.push(projectile);
 }
 
 function makeBaddies(){

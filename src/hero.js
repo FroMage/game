@@ -26,6 +26,8 @@ function heroShoots(){
 			y: hero.y + 14,
 			w: 10,
 			h: 1,
+			color: 'black',
+			friend: true,
 			draw: function(){
 				drawProjectile(this);
 			},
@@ -40,6 +42,16 @@ function heroShoots(){
 	projectiles.push(projectile);
 }
 
+function heroTouched(){
+	if(--hero.hearts == 0){
+		hero.dead = true;
+		explode(hero);
+		gameOver = true;
+	} else {
+		heroHurt();
+	}
+}
+
 function heroHurt(){
 	// three seconds
 	hero.grace = 3 * fps;
@@ -47,8 +59,9 @@ function heroHurt(){
 }
 
 function drawProjectile(projectile){
+	ctx.strokeStyle = projectile.color;
 	ctx.beginPath();       // Start a new path
 	ctx.moveTo(projectile.x, projectile.y);  // Move the pen to (x, y)
-	ctx.lineTo(projectile.x + projectile.w, projectile.y);  // Draw a line to (x+10, y)
+	ctx.lineTo(projectile.x + projectile.w, projectile.y + projectile.h);  // Draw a line to (x+10, y)
 	ctx.stroke();          // Render the path
 }

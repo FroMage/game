@@ -50,29 +50,38 @@ function handleSprites(){
 function collisions(){
 	// projectiles
 	for(let projectile of projectiles){
-		// detect collisions
-		for(let baddie of baddies){
-			if(!baddie.dead && collision(baddie, projectile)){
-				baddie.dead = true;
-				projectile.dead = true;
-				explode(baddie);
-				// only explode single baddie
-				break;
+		if(projectile.friend){
+			// detect friend projectile collisions with baddies
+			for(let baddie of baddies){
+				if(!baddie.dead && collision(baddie, projectile)){
+					baddie.dead = true;
+					projectile.dead = true;
+					explode(baddie);
+					// only explode single baddie
+					break;
+				}
 			}
 		}
 	}
 	if(!gameOver && hero.grace == 0){
 		// hero
+		let handled = false;
 		for(let baddie of baddies){
 			if(!baddie.dead && collision(baddie, hero)){
-				if(--hero.hearts == 0){
-					hero.dead = true;
-					explode(hero);
-					gameOver = true;
-				} else {
-					heroHurt();
-				}
+				heroTouched();
+				handled = true;
 				break;
+			}
+		}
+		if(!handled){
+			for(let projectile of projectiles){
+				if(!projectile.friend){
+					// detect hostile projectile collisions with baddies
+					if(collision(hero, projectile)){
+						heroTouched();
+						break;
+					}
+				}
 			}
 		}
 	}
