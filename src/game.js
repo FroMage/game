@@ -10,7 +10,7 @@ function clear(){
 	ctx.fillRect(0, 0, 640, 480);
 }
 
-function draw(){
+function drawGame(){
 	clear();
 	makeBaddies();
 	drawBackgrounds();
@@ -19,7 +19,8 @@ function draw(){
 }
 
 function startLoop(){
-	setInterval(draw, 1000/fps);
+	makeHero();
+	setInterval(drawGame, 1000/fps);
 }
 
 function loadImages(files, imagesLoaded){
@@ -48,7 +49,7 @@ window.addEventListener('load', (event) => {
 		"../images/hero.png",
 		"../images/bad-1.png"
 	], function(bitmaps) {
-		[bg1, bg2, bg3, hero, bad1] = bitmaps;
+		[bg1, bg2, bg3, heroSprite, bad1Sprite] = bitmaps;
 		startLoop();
 	});
 });
@@ -63,10 +64,10 @@ document.addEventListener("keydown", event => {
 		heroShoots();
 		break;
 	case 38: // up
-		heroOffset = Math.max(heroOffset - heroSpeed, 32);
+		hero.y = Math.max(hero.y - heroSpeed, 32);
 		break;
 	case 40: // down
-		heroOffset = Math.min(heroOffset + heroSpeed, 480 - 32);
+		hero.y = Math.min(hero.y + heroSpeed, 480 - 32);
 		break;
 	default:
 		consumed = false;
