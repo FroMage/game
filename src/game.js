@@ -89,14 +89,31 @@ document.addEventListener("keydown", event => {
 		}
 		break;
 	case 38: // up
-		if(!gameOver){
-			hero.y = Math.max(hero.y - heroSpeed, 32);
-		}
+		hero.movement = -3;
 		break;
 	case 40: // down
-		if(!gameOver){
-			hero.y = Math.min(hero.y + heroSpeed, 480 - 32);
-		}
+		hero.movement = 3;
+		break;
+	default:
+		consumed = false;
+	}
+	if(consumed){
+		event.preventDefault();
+		event.stopPropagation();
+	}
+});
+
+document.addEventListener("keyup", event => {
+	if (event.isComposing || event.keyCode === 229) {
+	    return;
+	}
+	var consumed = true;
+	switch(event.keyCode){
+	case 38: // up
+		hero.movement = 0;
+		break;
+	case 40: // down
+		hero.movement = 0;
 		break;
 	default:
 		consumed = false;

@@ -12,10 +12,14 @@ function makeHero(){
 			h: 32,
 			grace: 0,
 			hearts: 3,
+			movement: 0,
 			img: heroSprite,
 			explosionSound: deadSound,
 			explode: function(){
 				explode(this);
+			},
+			move: function() {
+				this.y = Math.min(480 - 20, Math.max(20, this.y + this.movement));
 			},
 			draw: function() {
 				if(this.grace == 0 || (this.grace-- % 20) < 10){

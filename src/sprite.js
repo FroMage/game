@@ -37,6 +37,7 @@ function handleSprites(){
 	draw(explosions);
 	draw(objects);
 	// move
+	move(hero);
 	move(projectiles);
 	move(baddies);
 	move(explosions);
