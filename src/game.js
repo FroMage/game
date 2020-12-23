@@ -34,6 +34,7 @@ function drawGame(){
 	if(gameOver){
 		drawGameOver();
 	}
+	drawDialog();
 }
 
 function startLoop(){
@@ -70,9 +71,16 @@ window.addEventListener('load', (event) => {
 		"../images/boss.png",
 		"../images/heart-empty.png",
 		"../images/heart-full.png",
+		"../images/hero-happy.png",
+		"../images/hero-talking.png",
+		"../images/hero-wondering.png",
+		"../images/boss-talking.png",
+		"../images/boss-sad.png",
 	], function(bitmaps) {
 		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite, 
-			bossSprite, heartEmptySprite, heartFullSprite] = bitmaps;
+			bossSprite, heartEmptySprite, heartFullSprite,
+			heroHappySprite, heroTalkingSprite, heroWonderingSprite,
+			bossTalkingSprite, bossSadSprite] = bitmaps;
 		startLoop();
 	});
 });

@@ -27,6 +27,8 @@ function makeHero(){
 				}
 			}
 	}
+	addDialog(heroTalkingSprite, "Bon, on va visiter ce secteur");
+	addDialog(heroWonderingSprite, "Je la sens mal, cette histoire");
 }
 
 function heroShoots(){
@@ -75,7 +77,6 @@ function makeObjects(){
 	let rand = Math.random();
 	// 0.2% chance
 	if(rand < 0.002){
-		console.log("make heart");
 		makeHeart();
 	}
 }

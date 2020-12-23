@@ -31,6 +31,7 @@ function makeBoss(){
 		shoot: fps * 3,
 		exploding: 0,
 		explode: function(){
+			addDialog(bossSadSprite, "J‘ai une légère panne de moteur");
 			explodeBig(this);
 			this.exploding = 200;
 		},
@@ -48,6 +49,8 @@ function makeBoss(){
 				}
 				this.exploding--;
 				if(this.exploding == 0){
+					addDialog(bossTalkingSprite, "Je me vengerai !");
+					addDialog(heroHappySprite, "Bon débarras !");
 					bossHere = false;
 				}
 			} else if(this.coming-- > 0){
@@ -66,6 +69,7 @@ function makeBoss(){
 			return this.x > 0 && (!this.dead || this.exploding > 0);
 		}
 	});
+	addDialog(bossTalkingSprite, "Je vais t‘écrabouiller !!");
 }
 
 function makeBaddie(type){
