@@ -52,6 +52,7 @@ function makeBoss(){
 					addDialog(bossTalkingSprite, "Je me vengerai !");
 					addDialog(heroHappySprite, "Bon débarras !");
 					bossHere = false;
+					playMusic(normalMusic, true);
 				}
 			} else if(this.coming-- > 0){
 				this.x--;
@@ -70,6 +71,7 @@ function makeBoss(){
 		}
 	});
 	addDialog(bossTalkingSprite, "Je vais t‘écrabouiller !!");
+	playMusic(bossMusic, true);
 }
 
 function makeBaddie(type){

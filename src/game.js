@@ -39,6 +39,8 @@ function drawGame(){
 
 function startLoop(){
 	makeHero();
+	playMusic(introMusic);
+	playMusic(normalMusic, true);
 	setInterval(drawGame, 1000/fps);
 }
 
