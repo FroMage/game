@@ -4,8 +4,10 @@ const ctx = canvas.getContext('2d');
 const fps = 60;
 
 var timerId;
-var gameOver = false;
 var frame = 0;
+var gameStarted = false;
+var gameOver = false;
+var gamePaused = false;
 
 function clear(){
 	ctx.fillStyle = 'black';
@@ -17,6 +19,33 @@ function drawGameOver(){
 	ctx.font = height+'px monospace';
 	ctx.fillStyle = 'red';
 	let text = "GAME OVER";
+	let size = ctx.measureText(text);
+	ctx.fillText(text, (640-size.width)/2, (480+height)/2);
+}
+
+function drawGameOver(){
+	let height = 64;
+	ctx.font = height+'px monospace';
+	ctx.fillStyle = 'red';
+	let text = "GAME OVER";
+	let size = ctx.measureText(text);
+	ctx.fillText(text, (640-size.width)/2, (480+height)/2);
+}
+
+function drawStart(){
+	let height = 64;
+	ctx.font = height+'px monospace';
+	ctx.fillStyle = 'blue';
+	let text = "PRESS SPACE";
+	let size = ctx.measureText(text);
+	ctx.fillText(text, (640-size.width)/2, (480+height)/2);
+}
+
+function drawPaused(){
+	let height = 64;
+	ctx.font = height+'px monospace';
+	ctx.fillStyle = 'blue';
+	let text = "PAUSE";
 	let size = ctx.measureText(text);
 	ctx.fillText(text, (640-size.width)/2, (480+height)/2);
 }
@@ -33,15 +62,42 @@ function drawGame(){
 	handleSprites();
 	if(gameOver){
 		drawGameOver();
+	} else if(gamePaused){
+		drawPaused();
 	}
 	drawDialog();
 }
 
-function startLoop(){
+function start(){
 	makeHero();
 	playMusic(introMusic);
 	playMusic(normalMusic, true);
-	setInterval(drawGame, 1000/fps);
+}
+
+function startLoop(){
+	start();
+	timerId = setInterval(drawGame, 1000/fps);
+}
+
+function pauseGame(){
+	if(gamePaused){
+		timerId = setInterval(drawGame, 1000/fps);
+	}else{
+		clearInterval(timerId);
+		timerId = undefined;
+		drawPaused();
+	}
+	pauseMusic();
+	gamePaused = !gamePaused;
+}
+
+function restartGame(){
+	frame = 0;
+	score = 0;
+	gameOver = false;
+	resetSprites();
+	resetMusic();
+	start();
 }
 
 function loadImages(files, imagesLoaded){
@@ -62,7 +118,17 @@ function loadImages(files, imagesLoaded){
     }   
 }
 
-window.addEventListener('load', (event) => {
+function startGame(){
+	if(gameStarted){
+		restartGame();
+	} else {
+		gameStarted = true;
+		startLoop();
+	}
+}
+
+window.addEventListener('load', function(event) {
+	registerKeyListeners();
 	loadImages([
 		"../images/bg-1.png",
 		"../images/bg-2.png",
@@ -78,58 +144,79 @@ window.addEventListener('load', (event) => {
 		"../images/hero-wondering.png",
 		"../images/boss-talking.png",
 		"../images/boss-sad.png",
-	], function(bitmaps) {
+		], function(bitmaps) {
 		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite, 
 			bossSprite, heartEmptySprite, heartFullSprite,
 			heroHappySprite, heroTalkingSprite, heroWonderingSprite,
 			bossTalkingSprite, bossSadSprite] = bitmaps;
-		startLoop();
+		clear();
+		drawBackgrounds();
+		drawStart();
 	});
 });
 
-document.addEventListener("keydown", event => {
-	if (event.isComposing || event.keyCode === 229) {
-	    return;
-	}
-	var consumed = true;
-	switch(event.keyCode){
-	case 32: // space
-		if(!gameOver){
-			heroShoots();
+function registerKeyListeners(){
+	document.addEventListener("keydown", event => {
+		if (event.isComposing || event.keyCode === 229) {
+		    return;
 		}
-		break;
-	case 38: // up
-		hero.movement = -3;
-		break;
-	case 40: // down
-		hero.movement = 3;
-		break;
-	default:
-		consumed = false;
-	}
-	if(consumed){
-		event.preventDefault();
-		event.stopPropagation();
-	}
-});
+		var consumed = true;
+		switch(event.keyCode){
+		case 13: // enter
+			if(gameStarted && !gameOver){
+				pauseGame();
+			}
+			break;
+		case 32: // space
+			if(gamePaused){
+				pauseGame();
+			} else if(gameOver || !gameStarted){
+				startGame();
+			} else {
+				heroShoots();
+			}
+			break;
+		case 38: // up
+			if(gameStarted){
+				hero.movement = -3;
+			}
+			break;
+		case 40: // down
+			if(gameStarted){
+				hero.movement = 3;
+			}
+			break;
+		default:
+			consumed = false;
+		}
+		if(consumed){
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	});
 
-document.addEventListener("keyup", event => {
-	if (event.isComposing || event.keyCode === 229) {
-	    return;
-	}
-	var consumed = true;
-	switch(event.keyCode){
-	case 38: // up
-		hero.movement = 0;
-		break;
-	case 40: // down
-		hero.movement = 0;
-		break;
-	default:
-		consumed = false;
-	}
-	if(consumed){
-		event.preventDefault();
-		event.stopPropagation();
-	}
-});
+	document.addEventListener("keyup", event => {
+		if (event.isComposing || event.keyCode === 229) {
+		    return;
+		}
+		var consumed = true;
+		switch(event.keyCode){
+		case 38: // up
+			if(gameStarted){
+				hero.movement = 0;
+			}
+			break;
+		case 40: // down
+			if(gameStarted){
+				hero.movement = 0;
+			}
+			break;
+		default:
+			consumed = false;
+		}
+		if(consumed){
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	});
+}

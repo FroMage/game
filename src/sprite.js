@@ -27,6 +27,14 @@ function cleanup(list){
 	return list.filter(function(elem){ return elem.valid(); });
 }
 
+function resetSprites(){
+	hero.hearts = 3;
+	projectiles.length = 0;
+	baddies.length = 0;
+	explosions.length = 0;
+	objects.length = 0;
+}
+
 function handleSprites(){
 	// draw
 	if(!gameOver){

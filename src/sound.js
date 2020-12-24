@@ -35,6 +35,31 @@ function playMusic(music, loop){
 	}
 }
 
+function pauseMusic(){
+	if(musicQueue.length > 0){
+		if(musicQueue[0].paused)
+			musicQueue[0].play();
+		else
+			musicQueue[0].pause();
+	}
+}
+
+function resetMusic(){
+	if(musicQueue.length > 0){
+		// there's no stop
+		musicQueue[0].pause();
+		musicQueue[0].currentTime = 0;
+	}
+	musicQueue.length = 0;
+}
+
+function stopMusic(){
+	if(musicQueue.length > 0){
+		musicQueue[0].loop = false;
+		musicQueue.length = 1;
+	}
+}
+
 function MultiChannelAudio(src) {
 	this.channels = [];
 	this.index = 0;

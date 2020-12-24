@@ -58,6 +58,7 @@ function heroTouched(){
 		hero.dead = true;
 		hero.explode();
 		gameOver = true;
+		stopMusic();
 	} else {
 		// three seconds
 		hero.grace = 3 * fps;
