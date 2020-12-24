@@ -3,7 +3,6 @@ const ctx = canvas.getContext('2d');
 
 const fps = 60;
 
-var timerId;
 var frame = 0;
 var gameStarted = false;
 var gameOver = false;
@@ -66,6 +65,9 @@ function drawGame(){
 		drawPaused();
 	}
 	drawDialog();
+	if(!gamePaused){
+		window.requestAnimationFrame(drawGame);
+	}
 }
 
 function start(){
@@ -76,19 +78,18 @@ function start(){
 
 function startLoop(){
 	start();
-	timerId = setInterval(drawGame, 1000/fps);
+	window.requestAnimationFrame(drawGame);
 }
 
 function pauseGame(){
-	if(gamePaused){
-		timerId = setInterval(drawGame, 1000/fps);
-	}else{
-		clearInterval(timerId);
-		timerId = undefined;
-		drawPaused();
-	}
 	pauseMusic();
-	gamePaused = !gamePaused;
+	if(gamePaused){
+		gamePaused = false;
+		window.requestAnimationFrame(drawGame);
+	}else{
+		gamePaused = true;
+//		drawPaused();
+	}
 }
 
 function restartGame(){
