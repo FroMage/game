@@ -9,6 +9,27 @@ var gameOver = false;
 var gamePaused = false;
 var lastTouchMoveY;
 
+var hasTouchScreen = false;
+if ("maxTouchPoints" in navigator) {
+    hasTouchScreen = navigator.maxTouchPoints > 0;
+} else if ("msMaxTouchPoints" in navigator) {
+    hasTouchScreen = navigator.msMaxTouchPoints > 0;
+} else {
+    var mQ = window.matchMedia && matchMedia("(pointer:coarse)");
+    if (mQ && mQ.media === "(pointer:coarse)") {
+        hasTouchScreen = !!mQ.matches;
+    } else if ('orientation' in window) {
+        hasTouchScreen = true; // deprecated, but good fallback
+    } else {
+        // Only as a last resort, fall back to user agent sniffing
+        var UA = navigator.userAgent;
+        hasTouchScreen = (
+            /\b(BlackBerry|webOS|iPhone|IEMobile)\b/i.test(UA) ||
+            /\b(Android|Windows Phone|iPad|iPod)\b/i.test(UA)
+        );
+    }
+}
+
 function clear(){
 	ctx.fillStyle = 'black';
 	ctx.fillRect(0, 0, 640, 480);
@@ -170,7 +191,6 @@ function registerKeyListeners(){
 		    return;
 		}
 		var consumed = true;
-		console.log(event.keyCode);
 		switch(event.keyCode){
 		case 13: // enter
 			if(gameStarted && !gameOver){
@@ -234,23 +254,40 @@ function registerKeyListeners(){
 	});
 	
 	// for mobile
-	document.addEventListener("touchstart", event => {});
-	document.addEventListener("touchend", event => {
-		hero.movement = 0;
-		if(!gameStarted){
-			startGame();
-		}
-	});
-	document.addEventListener("touchcancel", event => {});
-	document.addEventListener("touchmove", event => {
-		if(lastTouchMoveY){
-			if(lastTouchMoveY < event.pageY){
-				hero.movement = -3;
+	if(hasTouchScreen){
+		document.addEventListener("touchstart", event => {
+			lastTouchMoveY = undefined;
+		});
+		document.addEventListener("touchend", event => {
+			if(gameStarted){
+				if(lastTouchMoveY) {
+					// we had a move event
+					hero.movement = 0;
+				} else {
+					// single click
+					heroShoots();
+				}
 			} else {
-				hero.movement = 3;
+				startGame();
+				fullScreen();
 			}
-		}
-		lastTouchMoveY = event.pageY;
-	});
-
+			event.preventDefault();
+		});
+		document.addEventListener("touchcancel", event => {});
+		document.addEventListener("touchmove", event => {
+			for(var touch of event.touches){
+				if(gameStarted && lastTouchMoveY){
+					if(lastTouchMoveY < touch.pageY){
+						hero.movement = 3;
+					} else if(lastTouchMoveY > touch.pageY){
+						hero.movement = -3;
+					} else {
+						hero.movement = 0;
+					}
+				}
+				lastTouchMoveY = touch.pageY;
+			}
+			event.preventDefault();
+		});
+	}
 }
