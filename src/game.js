@@ -7,6 +7,7 @@ var frame = 0;
 var gameStarted = false;
 var gameOver = false;
 var gamePaused = false;
+var lastTouchMoveY;
 
 function clear(){
 	ctx.fillStyle = 'black';
@@ -231,4 +232,25 @@ function registerKeyListeners(){
 			event.stopPropagation();
 		}
 	});
+	
+	// for mobile
+	document.addEventListener("touchstart", event => {});
+	document.addEventListener("touchend", event => {
+		hero.movement = 0;
+		if(!gameStarted){
+			startGame();
+		}
+	});
+	document.addEventListener("touchcancel", event => {});
+	document.addEventListener("touchmove", event => {
+		if(lastTouchMoveY){
+			if(lastTouchMoveY < event.pageY){
+				hero.movement = -3;
+			} else {
+				hero.movement = 3;
+			}
+		}
+		lastTouchMoveY = event.pageY;
+	});
+
 }
