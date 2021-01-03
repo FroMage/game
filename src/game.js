@@ -88,7 +88,6 @@ function pauseGame(){
 		window.requestAnimationFrame(drawGame);
 	}else{
 		gamePaused = true;
-//		drawPaused();
 	}
 }
 
