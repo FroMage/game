@@ -273,7 +273,12 @@ function registerKeyListeners(){
 			}
 			event.preventDefault();
 		});
-		document.addEventListener("touchcancel", event => {});
+		document.addEventListener("touchcancel", event => {
+			if(gameStarted){
+				hero.movement = 0;
+			}
+			event.preventDefault();
+		});
 		document.addEventListener("touchmove", event => {
 			for(var touch of event.touches){
 				if(gameStarted && lastTouchMoveY){
