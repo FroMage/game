@@ -155,17 +155,29 @@ window.addEventListener('load', function(event) {
 	});
 });
 
+function fullScreen(){
+	if(document.fullscreenElement){
+		document.exitFullscreen();
+	}else{
+		canvas.requestFullscreen();
+	}
+}
+
 function registerKeyListeners(){
 	document.addEventListener("keydown", event => {
 		if (event.isComposing || event.keyCode === 229) {
 		    return;
 		}
 		var consumed = true;
+		console.log(event.keyCode);
 		switch(event.keyCode){
 		case 13: // enter
 			if(gameStarted && !gameOver){
 				pauseGame();
 			}
+			break;
+		case 70: // f
+			fullScreen();
 			break;
 		case 32: // space
 			if(gamePaused){
