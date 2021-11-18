@@ -8,8 +8,11 @@ var bad2Sprite;
 var bad3Sprite;
 
 var bossSprite;
+var boss2Sprite;
 
 var bossHere = false;
+
+var bossType = 0;
 
 function makeBoss(){
 	bossHere = true;
@@ -51,8 +54,8 @@ function makeBoss(){
 				}
 				this.exploding--;
 				if(this.exploding == 0){
-					addDialog(bossTalkingSprite, "Je me vengerai !");
-					addDialog(heroHappySprite, "Bon débarras !");
+					addDialog(bossTalkingSprite,  "Tu n'en a pas fini avec moi!");
+					addDialog(heroHappySprite, "Bon débarras!");
 					bossHere = false;
 					playMusic(normalMusic, true);
 				}
@@ -73,6 +76,71 @@ function makeBoss(){
 		}
 	});
 	addDialog(bossTalkingSprite, "Je vais t‘écrabouiller !!");
+	playMusic(bossMusic, true);
+}
+
+function makeBoss2(){
+	bossHere = true;
+	let centerX = 640 - 128 - 40;
+	let centerY = (480 - 128) / 2;
+	baddies.push({
+		centerX: centerX,
+		centerY: centerY,
+		x : centerX + 200, // coming offset
+		y : centerY + 50, // radius
+		w: 128,
+		h: 128,
+		grace: 0,
+		hearts: 3,
+		reward: 200,
+		img: boss2Sprite,
+	    explosionSound: explosionSound,
+		// for moving sprites
+		angle: 0,
+		coming: 200,
+		shoot: fps * 3,
+		exploding: 0,
+		explode: function(){
+			addDialog(boss2TalkingSprite, "Je reviendrai plus fort encore.");
+			explodeBig(this);
+			this.exploding = 200;
+		},
+		draw: function(){
+			drawHearts(this.hearts, 480 - 100);
+			if(this.grace == 0 || (this.grace-- % 20) < 10){
+				drawSprite(this);
+			}
+		},
+		move: function(){
+			if(this.exploding > 0){
+				// only add explosion every 2 frames
+				if(this.exploding % 2 == 0){
+					addBigExplosionPart(this);
+				}
+				this.exploding--;
+				if(this.exploding == 0){
+					addDialog(boss2TalkingSprite, "Je me vengerai !");
+					addDialog(heroHappySprite, "Il était dur celui la !");
+					bossHere = false;
+					playMusic(normalMusic, true);
+				}
+			} else if(this.coming-- > 0){
+				this.x--;
+			} else {
+				if(!gameOver && !this.grace && --this.shoot == 0){
+					this.shoot = fps * 3;
+					boss2Shoots(this);
+				}
+				this.angle = (this.angle + 0.2) % 360;
+				this.x = this.centerX + Math.sin(this.angle / (2 * Math.PI)) * 50;
+				this.y = this.centerY + Math.cos(this.angle / (2 * Math.PI)) * 50;
+			}
+		},
+		valid: function(){
+			return this.x > 0 && (!this.dead || this.exploding > 0);
+		}
+	});
+	addDialog(boss2TalkingSprite, "Je vais t‘écrabouiller !!");
 	playMusic(bossMusic, true);
 }
 
@@ -201,7 +269,7 @@ function bossShoots(baddie){
 	var projUpLeft = Object.assign({}, projectile);
 	var projDownRight = Object.assign({}, projectile);
 	var projDownLeft = Object.assign({}, projectile);
-	
+
 	projUp.directionY = -1;
 	projDown.directionY = 1;
 	projLeft.directionX = -1;
@@ -227,11 +295,58 @@ function bossShoots(baddie){
 	pewSound.play();
 }
 
+function boss2Shoots(baddie){
+	let projectile = {
+			x: baddie.x + baddie.w/2,
+			y: baddie.y + baddie.h/2,
+			w: 10,
+			h: 10,
+			pulse: 1,
+			color: 'red',
+			friend: false,
+			draw: function(){
+				drawCircleProjectile(this);
+			},
+			move: function(){
+				let originX = this.x;
+				let originY = this.y;
+				let targetX = hero.x + hero.w/2;
+				let targetY = hero.y + hero.h/2;
+				let horiz = targetX - originX;
+				let vert = targetY - originY;
+				let angle = Math.atan(vert / horiz);
+				if(this.x > 100) {
+					this.directionX = -Math.cos(angle);
+					this.directionY = -Math.sin(angle);
+				}
+				this.x += this.directionX * 5;
+				this.y += this.directionY * 5;
+				this.w += this.pulse;
+				this.h = this.w;
+				if(this.w == 20){
+					this.pulse = -1;
+				}
+				if(this.w == 10){
+					this.pulse = 1;
+				}
+			},
+			valid: function(){
+				return this.x < 640 &&
+					this.y < 480 &&
+					this.x > 0 &&
+					this.y > 0 &&
+					!this.dead;
+			}
+	}
+	pewSound.play();
+	projectiles.push(projectile);
+}
+
 
 function drawCircleProjectile(projectile){
 	ctx.fillStyle = projectile.color;
 	ctx.beginPath();
-	ctx.ellipse(projectile.x, projectile.y, 10, 10, 0, 0, 2 * Math.PI);
+	ctx.ellipse(projectile.x, projectile.y, projectile.w, projectile.h, 0, 0, 2 * Math.PI);
 	ctx.fill();
 }
 
@@ -240,8 +355,13 @@ function makeBaddies(){
 	if(bossHere){
 		return;
 	}
-	if(frame != 0 && (frame % (fps * 10)) == 0){
-		makeBoss();
+	if(frame != 0 && (frame % (fps * 40)) == 0){
+		if(bossType == 0){
+			makeBoss();
+		} else {
+			makeBoss2();
+		}
+		bossType = (bossType + 1) % 2;
 		return;
 	}
 	let rand = Math.random();

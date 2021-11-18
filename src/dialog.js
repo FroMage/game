@@ -2,6 +2,7 @@ var heroHappySprite;
 var heroTalkingSprite;
 var heroWonderingSprite;
 var bossTalkingSprite;
+var boss2TalkingSprite;
 var bossSadSprite;
 
 var dialogs = [];
