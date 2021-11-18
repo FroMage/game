@@ -61,7 +61,6 @@ function makeBoss(){
 			} else {
 				if(!gameOver && !this.grace && --this.shoot == 0){
 					this.shoot = fps * 3;
-					baddieShoots(this);
 					bossShoots(this);
 				}
 				this.angle = (this.angle + 0.2) % 360;
@@ -173,10 +172,18 @@ function bossShoots(baddie){
 	let projectile = {
 			x: originX,
 			y: originY,
+			w: 10,
+			h: 10,
+			directionX: 0,
+			directionY: 0,
 			color: 'green',
 			friend: false,
 			draw: function(){
 				drawCircleProjectile(this);
+			},
+			move: function(){
+				this.x += this.directionX * Math.floor(this.w / 2);
+				this.y += this.directionY * Math.floor(this.h / 2);
 			},
 			valid: function(){
 				return this.x < 640 &&
@@ -190,31 +197,36 @@ function bossShoots(baddie){
 	var projDown = Object.assign({}, projectile);
 	var projLeft = Object.assign({}, projectile);
 	var projRight = Object.assign({}, projectile);
-	projUp.w = 10;
-	projUp.h = -10;
-	projUp.move = function(){
-		this.y += Math.floor(this.h / 2);
-	}
-	projDown.w = 10;
-	projDown.h = 10;
-	projDown.move = function(){
-		this.y += Math.floor(this.h / 2);
-	};
-	projLeft.w = -10;
-	projLeft.h = 10;
-	projLeft.move = function(){
-		this.x += Math.floor(this.w / 2);
-	};
-	projRight.w = 10;
-	projRight.h = -10;
-	projRight.move = function(){
-		this.x += Math.floor(this.w / 2);
-	};
+	var projUpRight = Object.assign({}, projectile);
+	var projUpLeft = Object.assign({}, projectile);
+	var projDownRight = Object.assign({}, projectile);
+	var projDownLeft = Object.assign({}, projectile);
+	
+	projUp.directionY = -1;
+	projDown.directionY = 1;
+	projLeft.directionX = -1;
+	projRight.directionX = 1;
+
+	projUpRight.directionX = 1;
+	projUpRight.directionY = -1;
+	projUpLeft.directionX = -1;
+	projUpLeft.directionY = -1;
+	projDownRight.directionX = 1;
+	projDownRight.directionY = 1;
+	projDownLeft.directionX = -1;
+	projDownLeft.directionY = 1;
+
 	projectiles.push(projUp);
 	projectiles.push(projDown);
 	projectiles.push(projLeft);
 	projectiles.push(projRight);
+	projectiles.push(projUpRight);
+	projectiles.push(projUpLeft);
+	projectiles.push(projDownRight);
+	projectiles.push(projDownLeft);
+	pewSound.play();
 }
+
 
 function drawCircleProjectile(projectile){
 	ctx.fillStyle = projectile.color;
@@ -228,7 +240,7 @@ function makeBaddies(){
 	if(bossHere){
 		return;
 	}
-	if(frame != 0 && (frame % (fps * 40)) == 0){
+	if(frame != 0 && (frame % (fps * 10)) == 0){
 		makeBoss();
 		return;
 	}
