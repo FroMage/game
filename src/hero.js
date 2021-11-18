@@ -19,7 +19,7 @@ function makeHero(){
 				explode(this);
 			},
 			move: function() {
-				this.y = Math.min(480 - 20, Math.max(20, this.y + this.movement));
+				this.y = Math.min(480 - 64 - 32, Math.max(20, this.y + this.movement));
 			},
 			draw: function() {
 				if(this.grace == 0 || (this.grace-- % 20) < 10){
@@ -68,6 +68,7 @@ function heroTouched(){
 
 function drawProjectile(projectile){
 	ctx.strokeStyle = projectile.color;
+	ctx.lineWidth = 2;
 	ctx.beginPath();       // Start a new path
 	ctx.moveTo(projectile.x, projectile.y);  // Move the pen to (x, y)
 	ctx.lineTo(projectile.x + projectile.w, projectile.y + projectile.h);  // Draw a line to (x+10, y)
@@ -85,7 +86,7 @@ function makeObjects(){
 function makeHeart(){
 	objects.push({
 		x : 630,
-		y : 30 + Math.floor(Math.random() * 440),
+		y : 30 + Math.floor(Math.random() * (480 - 64 - 16)),
 		w: 16,
 		h: 16,
 		img: heartFullSprite,

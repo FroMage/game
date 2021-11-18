@@ -44,15 +44,6 @@ function drawGameOver(){
 	ctx.fillText(text, (640-size.width)/2, (480+height)/2);
 }
 
-function drawGameOver(){
-	let height = 64;
-	ctx.font = height+'px monospace';
-	ctx.fillStyle = 'red';
-	let text = "GAME OVER";
-	let size = ctx.measureText(text);
-	ctx.fillText(text, (640-size.width)/2, (480+height)/2);
-}
-
 function drawStart(){
 	let height = 64;
 	ctx.font = height+'px monospace';
@@ -158,6 +149,7 @@ window.addEventListener('load', function(event) {
 		"../images/hero.png",
 		"../images/bad-1.png",
 		"../images/bad-2.png",
+		"../images/bad-3.png",
 		"../images/boss.png",
 		"../images/heart-empty.png",
 		"../images/heart-full.png",
@@ -167,7 +159,7 @@ window.addEventListener('load', function(event) {
 		"../images/boss-talking.png",
 		"../images/boss-sad.png",
 		], function(bitmaps) {
-		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite, 
+		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite, bad3Sprite,
 			bossSprite, heartEmptySprite, heartFullSprite,
 			heroHappySprite, heroTalkingSprite, heroWonderingSprite,
 			bossTalkingSprite, bossSadSprite] = bitmaps;

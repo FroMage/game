@@ -5,6 +5,8 @@ const bad1Speed = 2;
 
 var bad2Sprite;
 
+var bad3Sprite;
+
 var bossSprite;
 
 var bossHere = false;
@@ -60,6 +62,7 @@ function makeBoss(){
 				if(!gameOver && !this.grace && --this.shoot == 0){
 					this.shoot = fps * 3;
 					baddieShoots(this);
+					bossShoots(this);
 				}
 				this.angle = (this.angle + 0.2) % 360;
 				this.x = this.centerX + Math.sin(this.angle / (2 * Math.PI)) * 50;
@@ -81,13 +84,13 @@ function makeBaddie(type){
 		w: 32,
 		h: 32,
 		reward: type == 1 ? 10 : 20,
-		img: type == 1 ? bad1Sprite : bad2Sprite,
+		img: type == 1 ? bad1Sprite : type == 2 ? bad2Sprite : bad3Sprite,
 	    explosionSound: explosionSound,
 	    grace: 0,
 	    hearts: 1,
 		// for moving sprites
 		movementOffset: 0,
-		movement: 2,
+		movement: 1,
 		shoot: fps * 3,
 		explode: function(){
 			explode(this);
@@ -102,7 +105,7 @@ function makeBaddie(type){
 			}
 			if(type == 1){
 				this.x -= bad1Speed;
-			} else {
+			} else if(type == 2) {
 				this.x -= bad1Speed;
 				this.movementOffset += this.movement;
 				if(this.movementOffset <= -20){
@@ -111,6 +114,15 @@ function makeBaddie(type){
 					this.movement = -1;
 				}
 				this.y += this.movement;
+			} else {
+				this.x -= bad1Speed;
+				this.movementOffset += this.movement;
+				if(this.movementOffset <= -20){
+					this.movement = 1;
+				} else if(this.movementOffset > 20){
+					this.movement = -1;
+				}
+				this.x += this.movement;
 			}
 		},
 		valid: function(){
@@ -153,6 +165,65 @@ function baddieShoots(baddie){
 	projectiles.push(projectile);
 }
 
+function bossShoots(baddie){
+	let originX = baddie.x + baddie.w/2;
+	let originY = baddie.y + baddie.h/2;
+	let targetX = hero.x + hero.w/2;
+	let targetY = hero.y + hero.h/2;
+	let projectile = {
+			x: originX,
+			y: originY,
+			color: 'green',
+			friend: false,
+			draw: function(){
+				drawCircleProjectile(this);
+			},
+			valid: function(){
+				return this.x < 640 &&
+					this.y < 480 &&
+					this.x > 0 &&
+					this.y > 0 &&
+					!this.dead;
+			}
+	}
+	var projUp = Object.assign({}, projectile);
+	var projDown = Object.assign({}, projectile);
+	var projLeft = Object.assign({}, projectile);
+	var projRight = Object.assign({}, projectile);
+	projUp.w = 10;
+	projUp.h = -10;
+	projUp.move = function(){
+		this.y += Math.floor(this.h / 2);
+	}
+	projDown.w = 10;
+	projDown.h = 10;
+	projDown.move = function(){
+		this.y += Math.floor(this.h / 2);
+	};
+	projLeft.w = -10;
+	projLeft.h = 10;
+	projLeft.move = function(){
+		this.x += Math.floor(this.w / 2);
+	};
+	projRight.w = 10;
+	projRight.h = -10;
+	projRight.move = function(){
+		this.x += Math.floor(this.w / 2);
+	};
+	projectiles.push(projUp);
+	projectiles.push(projDown);
+	projectiles.push(projLeft);
+	projectiles.push(projRight);
+}
+
+function drawCircleProjectile(projectile){
+	ctx.fillStyle = projectile.color;
+	ctx.beginPath();
+	ctx.ellipse(projectile.x, projectile.y, 10, 10, 0, 0, 2 * Math.PI);
+	ctx.fill();
+}
+
+
 function makeBaddies(){
 	if(bossHere){
 		return;
@@ -164,8 +235,11 @@ function makeBaddies(){
 	let rand = Math.random();
 	// 1% chance
 	if(rand < 0.01){
-		// 0.2% blue
-		if(rand < 0.002){
+		// 0.1% green
+		if(rand < 0.001){
+			makeBaddie(3);
+		// 0.1% blue
+		} else if(rand < 0.002){
 			makeBaddie(2);
 		}else{
 			makeBaddie(1);
