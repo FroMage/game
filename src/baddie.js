@@ -7,6 +7,8 @@ var bad2Sprite;
 
 var bad3Sprite;
 
+var bad4Sprite;
+
 var bossSprite;
 var boss2Sprite;
 
@@ -145,13 +147,23 @@ function makeBoss2(){
 }
 
 function makeBaddie(type){
+	var sprite;
+	if(type == 1){
+		sprite = bad1Sprite;
+	}else if(type == 2){
+		sprite = bad2Sprite;
+	}else if(type == 3){
+		sprite = bad3Sprite;
+	}else if(type == 4){
+		sprite = bad4Sprite;
+	}
 	baddies.push({
 		x : 630,
 		y : 30 + Math.floor(Math.random() * 440),
 		w: 32,
 		h: 32,
 		reward: type == 1 ? 10 : 20,
-		img: type == 1 ? bad1Sprite : type == 2 ? bad2Sprite : bad3Sprite,
+		img: sprite ,
 	    explosionSound: explosionSound,
 	    grace: 0,
 	    hearts: 1,
@@ -181,7 +193,7 @@ function makeBaddie(type){
 					this.movement = -1;
 				}
 				this.y += this.movement;
-			} else {
+			} else if(type == 3) {
 				this.x -= bad1Speed;
 				this.movementOffset += this.movement;
 				if(this.movementOffset <= -20){
@@ -190,6 +202,16 @@ function makeBaddie(type){
 					this.movement = -1;
 				}
 				this.x += this.movement;
+			} else {
+				this.x -= bad1Speed;
+				if(hero.y == this.y)  {
+				}
+				else if(hero.y < this.y)  {
+					this.y = this.y - bad1Speed;
+				}
+				else {
+					this.y = this.y + bad1Speed;
+				}
 			}
 		},
 		valid: function(){
@@ -371,8 +393,11 @@ function makeBaddies(){
 		if(rand < 0.001){
 			makeBaddie(3);
 		// 0.1% blue
-		} else if(rand < 0.002){
+	}	 else if(rand < 0.002){
 			makeBaddie(2);
+		// 0.1% mover
+		} else if(rand < 0.003){
+			makeBaddie(4);
 		}else{
 			makeBaddie(1);
 		}

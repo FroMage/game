@@ -4,7 +4,7 @@ var heartFullSprite;
 
 function drawScore(){
 	ctx.font = '12px monospace';
-	ctx.fillStyle = 'red';
+	ctx.fillStyle = 'white';
 	ctx.fillText("Score: "+score, 10 + (4*16), 20);
 }
 
