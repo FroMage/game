@@ -146,6 +146,7 @@ window.addEventListener('load', function(event) {
 		"../images/bg-1.png",
 		"../images/bg-2.png",
 		"../images/bg-3.png",
+		"../images/bg-4.png",
 		"../images/hero.png",
 		"../images/bad-1.png",
 		"../images/bad-2.png",
@@ -161,7 +162,7 @@ window.addEventListener('load', function(event) {
 		"../images/boss2-talking.png",
 		"../images/boss-sad.png",
 		], function(bitmaps) {
-		[bg1, bg2, bg3, heroSprite, bad1Sprite, bad2Sprite, bad3Sprite,
+		[bg1, bg2, bg3, bg4, heroSprite, bad1Sprite, bad2Sprite, bad3Sprite,
 			bossSprite, boss2Sprite, heartEmptySprite, heartFullSprite,
 			heroHappySprite, heroTalkingSprite, heroWonderingSprite,
 			bossTalkingSprite, boss2TalkingSprite, bossSadSprite] = bitmaps;

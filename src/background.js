@@ -10,6 +10,10 @@ var bg3;
 var bg3Offset = 0;
 const bg3Speed = 1;
 
+var bg4;
+var bg4Offset = 0;
+const bg4Speed = 4;
+
 function drawBackground(bg, offset){
 	// x10 w630 -> x0 w630
 	var sx1 = offset 
@@ -28,12 +32,16 @@ function drawBackgrounds(){
 	drawBackground(bg1, bg1Offset);
 	drawBackground(bg2, bg2Offset);
 	drawBackground(bg3, bg3Offset);
+	drawBackground(bg4, bg4Offset);
 	// scroll
 	bg1Offset += bg1Speed;
 	bg2Offset += bg2Speed;
 	bg3Offset += bg3Speed;
+	bg4Offset += bg4Speed;
 	bg1Offset = (bg1Offset % 640);
 	bg2Offset = (bg2Offset % 640);
 	bg3Offset = (bg3Offset % 640);
+	bg4Offset = (bg4Offset % 640);
+
 
 }
