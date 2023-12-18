@@ -159,7 +159,7 @@ function makeBaddie(type){
 	}
 	baddies.push({
 		x : 630,
-		y : 30 + Math.floor(Math.random() * 440),
+		y : 30 + Math.floor(Math.random() * 354),
 		w: 32,
 		h: 32,
 		reward: type == 1 ? 10 : 20,
