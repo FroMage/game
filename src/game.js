@@ -69,6 +69,7 @@ function drawGame(){
 	makeObjects();
 	drawBackgrounds();
 	drawScore();
+	drawEnergy();
 	drawHearts(hero.hearts, 10);
 	// this detects collisions and can game over
 	handleSprites();

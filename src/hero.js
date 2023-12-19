@@ -32,11 +32,17 @@ function makeHero(){
 }
 
 function heroShoots(){
+	var large=false;
+	if(energy==5){
+		large=true;
+		energy=0;
+	}
 	let projectile = {
 			x: 32 + 32,
 			y: hero.y + 14,
 			w: 10,
-			h: 1,
+			h: large ? 10 : 1,
+			large: large,
 			color: 'white',
 			friend: true,
 			draw: function(){
@@ -71,7 +77,13 @@ function drawProjectile(projectile){
 	ctx.lineWidth = 2;
 	ctx.beginPath();       // Start a new path
 	ctx.moveTo(projectile.x, projectile.y);  // Move the pen to (x, y)
-	ctx.lineTo(projectile.x + projectile.w, projectile.y + projectile.h);  // Draw a line to (x+10, y)
+	if(projectile.large){
+		ctx.fillRect(projectile.x, projectile.y ,projectile.x + projectile.w, projectile.y + projectile.h);  // Draw a line to (x+10, y)
+		
+	}
+	else {
+		ctx.lineTo(projectile.x + projectile.w, projectile.y + projectile.h);  // Draw a line to (x+10, y)
+	}
 	ctx.stroke();          // Render the path
 }
 

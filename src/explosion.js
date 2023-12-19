@@ -52,12 +52,18 @@ function explode(sprite){
 	if(sprite.reward) {
 		score += sprite.reward;
 	}
+	if(energy < 5) {	
+		energy += 1;
+	}
 	sprite.explosionSound.play();
 }
 
 function explodeBig(sprite){
 	if(sprite.reward) {
 		score += sprite.reward;
+	}
+	if(energy < 5) {	
+		energy += 1;
 	}
 	sprite.explosionSound.play();
 }
