@@ -24,6 +24,12 @@ function makeHero(){
 			draw: function() {
 				if(this.grace == 0 || (this.grace-- % 20) < 10){
 					drawSprite(this);
+					if(this.powerup){
+						ctx.strokeStyle = 'red';
+						ctx.beginPath();
+						ctx.arc( this.x+16, this.y+16 , 32, 0, 2 * Math.PI);
+						ctx.stroke();
+					}
 				}
 			}
 	}
@@ -36,10 +42,18 @@ function heroShoots(){
 	if(energy==5){
 		large=true;
 		energy=0;
+	}	
+	pewSound.play();
+	heroShootsProJectile(14, large)
+	if (hero.powerup){
+		heroShootsProJectile(4, large)
+		heroShootsProJectile(24, large)
 	}
+}
+function heroShootsProJectile(offset, large){
 	let projectile = {
 			x: 32 + 32,
-			y: hero.y + 14,
+			y: hero.y + offset,
 			w: 10,
 			h: large ? 10 : 1,
 			large: large,
@@ -55,7 +69,6 @@ function heroShoots(){
 				return this.x < 640 && !this.dead;
 			}
 	}
-	pewSound.play();
 	projectiles.push(projectile);
 }
 
@@ -68,6 +81,7 @@ function heroTouched(){
 	} else {
 		// three seconds
 		hero.grace = 3 * fps;
+	    hero.powerup = false 
 		hurtSound.play();
 	}
 }
@@ -92,6 +106,10 @@ function makeObjects(){
 	// 0.2% chance
 	if(rand < 0.002){
 		makeHeart();
+		
+	}
+	else if(rand < 0.004){
+		makePowerup();
 	}
 }
 
@@ -119,3 +137,28 @@ function makeHeart(){
 		}
 	});
 }
+function makePowerup(){
+	objects.push({
+		x : 630,
+		y : 30 + Math.floor(Math.random() * (480 - 64 - 16)),
+		w: 32,
+		h: 32,
+		img: powerup,
+		draw: function(){
+			drawSprite(this);
+		},
+		move: function(){
+			this.x -= bad1Speed;
+		},
+		valid: function(){
+			return this.x > 0 && !this.dead;
+		},
+		eat: function(){
+			if(!gameOver){
+				hero.powerup = true;
+				powerupSound.play();
+			}
+		}
+	});
+}
+

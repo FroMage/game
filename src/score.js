@@ -2,6 +2,7 @@ var score = 0;
 var energy = 0;
 var heartEmptySprite;
 var heartFullSprite;
+var powerup;
 
 function drawScore(){
 	ctx.font = '12px monospace';

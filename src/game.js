@@ -163,11 +163,12 @@ window.addEventListener('load', function(event) {
 		"../images/boss-talking.png",
 		"../images/boss2-talking.png",
 		"../images/boss-sad.png",
+		"../images/powerup.png",
 		], function(bitmaps) {
 		[bg1, bg2, bg3, bg4, heroSprite, bad1Sprite, bad2Sprite, bad3Sprite, 
 			bad4Sprite,bossSprite, boss2Sprite, heartEmptySprite, heartFullSprite,
 			heroHappySprite, heroTalkingSprite, heroWonderingSprite,
-			bossTalkingSprite, boss2TalkingSprite, bossSadSprite] = bitmaps;
+			bossTalkingSprite, boss2TalkingSprite, bossSadSprite, powerup] = bitmaps;
 		clear();
 		drawBackgrounds();
 		drawStart();

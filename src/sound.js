@@ -2,6 +2,7 @@ const channels = 6;
 
 var pewSound = new MultiChannelAudio('../sounds/pew.mp3');
 var explosionSound = new MultiChannelAudio('../sounds/explosion.mp3');
+var powerupSound = new MultiChannelAudio('../sounds/powerup.mp3');
 var hurtSound = new MultiChannelAudio('../sounds/hurt.mp3');
 var heartSound = new MultiChannelAudio('../sounds/heart.mp3');
 var deadSound = new MultiChannelAudio('../sounds/dead.mp3');
