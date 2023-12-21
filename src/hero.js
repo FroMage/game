@@ -23,12 +23,11 @@ function makeHero(){
 			},
 			draw: function() {
 				if(this.grace == 0 || (this.grace-- % 20) < 10){
-					drawSprite(this);
 					if(this.powerup){
-						ctx.strokeStyle = 'red';
-						ctx.beginPath();
-						ctx.arc( this.x+16, this.y+16 , 32, 0, 2 * Math.PI);
-						ctx.stroke();
+						decoratePowerup(this, 32)
+					}
+					else{
+						drawSprite(this);
 					}
 				}
 			}
@@ -36,6 +35,39 @@ function makeHero(){
 	addDialog(heroTalkingSprite, "Bon, on va visiter ce secteur");
 	addDialog(heroWonderingSprite, "Je la sens mal, cette histoire");
 }
+
+function decoratePowerup (sprite, radius){
+	ctx.lineWidth = 2
+	ctx.strokeStyle = 'red';
+	var steps = 60;
+	var step = frame % steps
+	var doupleSteps = 2*steps
+	var doupleStep = frame % doupleSteps
+	var r;
+	var angle = (step * ( 2 * Math.PI) / steps);
+	var shift = 0;
+	if (doupleStep < steps){
+		r = (step * (radius / steps));
+	}
+	else {
+		r = ((steps - step) * (radius / steps));
+		shift = Math.PI;
+	}
+	ctx.beginPath();
+	ctx.ellipse( sprite.x+16, sprite.y+16 , radius, r, angle, shift+Math.PI, shift+2*Math.PI)
+	ctx.stroke();
+	ctx.beginPath(); 
+    ctx.ellipse( sprite.x+16, sprite.y+16 , r, radius, angle, shift+Math.PI*3/2, shift + Math.PI/2 )
+    ctx.stroke();
+		drawSprite(sprite);
+		ctx.beginPath();
+		ctx.ellipse( sprite.x+16, sprite.y+16 , radius, r, angle, shift, shift+Math.PI)
+		ctx.stroke();
+		ctx.beginPath();
+		ctx.ellipse( sprite.x+16, sprite.y+16 , r, radius, angle, shift + Math.PI/2, shift+Math.PI*3/2)
+	ctx.stroke();
+}
+
 
 function heroShoots(){
 	var large=false;
@@ -145,7 +177,7 @@ function makePowerup(){
 		h: 32,
 		img: powerup,
 		draw: function(){
-			drawSprite(this);
+			decoratePowerup(this, 20)
 		},
 		move: function(){
 			this.x -= bad1Speed;
